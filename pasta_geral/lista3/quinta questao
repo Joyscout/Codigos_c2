@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+   int n1, n2, resu=0, i;
+    
+   do{
+        printf("Digite o multiplicando: ");
+        scanf("%d",&n1);
+        printf("Digite o multiplicador: ");
+        scanf("%d",&n2);
+       
+        if(n1<n2 && n1>0 && n2>0){
+          
+            for(i=0; i<n1; i++){
+                resu += n2;
+            }
+            printf("O produto e: %d\n", resu);
+            
+  
+            break; 
+            
+        } else {
+         
+            printf("Valores inseridos invalidos. Tente novamente!\n\n");
+        }
+        
+    // Como usamos o break para sair na hora certa, podemos usar o 1 (verdadeiro)
+    } while(1); 
+    
+    return 0;
+}

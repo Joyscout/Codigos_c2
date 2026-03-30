@@ -1,0 +1,31 @@
+//setima questao
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+int main()
+{
+   char  nome[255], todos_nomes[15][255];
+   int nota2, i, cont=1, nota1, soma=0, cont_aluno=0;
+   float media, media_total;
+    do{
+       
+            printf("Digite o nome do aluno: ");
+            scanf("%s",&nome);
+            strcpy(todos_nomes[cont_aluno], nome);
+            cont_aluno++;
+            printf("\nDigite a nota da primeira prova: ");
+            scanf("%d",&nota1);  
+            printf("\nDigite a nota da segunda prova: ");
+            scanf("%d",&nota2);
+            soma+=nota1;
+            soma+=nota2;
+            media=(nota1+nota2)/2;
+            printf("o %d° aluno: %s, tirou na prova 1: %d, na prova 2: %d\nA sua media é: %.2f\n",cont, nome,nota1,nota2,media);
+            cont++;
+           
+           } while (cont<=15);
+           media_total=soma/cont;
+           printf("\n\n");
+           printf("a media total da sala foi de: %.2f", media_total);
+    return 0;
+}

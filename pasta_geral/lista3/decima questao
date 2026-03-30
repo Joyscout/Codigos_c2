@@ -1,0 +1,19 @@
+//decima questao
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+	int num, cont=0;
+	do {
+	printf("\n0 -  para cessar o codigo");
+	printf("\nDigite um numero: ");
+	scanf("%d",&num);
+	
+
+		if(num>=100 && num<=200) {
+		    cont++;
+		}
+	}while (num!=0);
+printf("Voce digitou %d que estão entre 100 e 200");
+	return 0;
+}

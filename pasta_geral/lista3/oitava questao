@@ -1,0 +1,30 @@
+//oitava questao
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+	float valor;
+	int cont=1;
+	char nome[255];
+	printf("Digite o nome do individuo: ");
+	scanf("%s",&nome);
+	printf("Digite o seu salario do individuo: ");
+	scanf("%f", &valor);
+
+	do {
+
+		if(valor<1300) {
+			printf(" \nO salario de %s C) de %.2f",nome,valor);
+
+		} else if(valor>=1300 && valor<2300) {
+			valor=valor*1.10;
+			printf(" \nO salario de %s C) de %.2f",nome,valor);
+
+		} else if(valor>=2300) {
+			valor=valor*1.15;
+			printf(" \nO salario de %s C) de %.2f",nome,valor);
+		}
+	} while(cont<=10);
+
+	return 0;
+}

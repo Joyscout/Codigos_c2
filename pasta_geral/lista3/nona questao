@@ -1,0 +1,42 @@
+//nona questao
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+	int cont=1, nota, regular=0, idade,  total_excelente=0, total_pessoas=20;
+	float media_idade, percent_bom=0,soma_idade=0,bom=0;
+	do{
+	    printf("1 - Regular\n2 - Bom\n3 - Excelente\n");
+		printf("\nDigite sua nota do filme de 'procurando dory'\n>: ");
+		scanf("%d",&nota);
+	
+		if(nota==1) { //Regular
+			printf(" \nDigite sua idade: ");
+			scanf("%d",&idade);
+			regular++;
+			soma_idade+=idade;
+			cont++;
+		} else if(nota==2) { //Bom
+			printf(" \nDigite sua idade: ");
+			scanf("%d",&idade);
+			bom++;
+			soma_idade+=idade;
+			cont++;
+		} else if(nota==3) { //Excelente
+			printf(" \nDigite sua idade: ");
+			scanf("%d",&idade);
+			soma_idade+=idade;
+			total_excelente++;
+			cont++;
+		}else{
+		    printf("\n\nValor invalido\n\n");
+		}
+	} while(cont<=total_pessoas);
+	media_idade=soma_idade/total_pessoas;
+	percent_bom=bom/total_pessoas;
+	printf("\nMedia das idades: %.2f",media_idade);
+	printf("\n%d pessoas votaram regular para o filme",regular);
+	printf("\n%.2f%% das pessoas votaram Bom para o filme",percent_bom);
+
+	return 0;
+}

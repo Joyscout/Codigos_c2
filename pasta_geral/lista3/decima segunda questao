@@ -1,0 +1,55 @@
+//decima segunda questao
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+	int num_consumidor, code; //numeros basicos
+	float media1,media2, kwh, custo; // calculos e valores
+	float consumo1=0, consumo2=0, consumo3=0; // armazenadores
+	int cont1=0, cont2=0; // contadores para a media
+	
+	do {
+    	printf("\n0 -  para cessar o codigo\n");
+    	printf("Digite o numero do consumidor: ");
+    	
+    	scanf("%d",&num_consumidor);
+    	if(num_consumidor==0){
+    	    break;
+    	}
+    	
+    	    printf("\nDigite a quantidade de kwh consumidos: ");
+    	    scanf("%f",&kwh);
+    	    printf("\n1 - Residencial\n2 - Comercial\n3 - Industrial");
+        	printf("\nDigite uma opção acima: ");
+        	scanf("%d",&code);
+        	
+        if(code==1){
+            custo=kwh*0.3;
+            cont1+=1;
+            consumo1+=kwh;
+        }else if(code==2){
+            custo=kwh*0.5;
+            cont2+=1;
+            consumo2+=kwh;
+        }else if(code==3){
+            custo=kwh*0.7;
+            consumo3+=kwh;
+        }
+    
+        printf("\n\no consumidor %d, gastará no total: R$ %.2f\n\n",num_consumidor,custo);
+	}while (code!=0);
+	printf("\n--- Resultados Finais ---\n");
+    printf("Total de consumo Residencial (1): %.2f kWh\n", consumo1);
+    printf("Total de consumo Comercial (2): %.2f kWh\n", consumo2);
+    printf("Total de consumo Industrial (3): %.2f kWh\n", consumo3);
+    if(consumo1>0){
+        media1=consumo1/cont1;
+        printf("\n\nA media de consumo da Residencial é de: %.2f",media1);
+    }
+    if(consumo2>0){
+        media2=consumo2/cont2;
+        printf("\nA media de consumo do Comercial é de: %.2f",media2);
+    }
+    
+	return 0;
+}

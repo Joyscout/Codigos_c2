@@ -1,0 +1,19 @@
+//decima primeira questao
+#include <stdio.h>
+
+
+int main() {
+	int  A=5000000, B=7000000, anos=0;
+	float nat_a=0.03,nat_b=0.02;
+	do {
+	    A+=A*nat_a;
+	    B+=B*nat_b;
+	    ano++;
+	
+
+	}while (A<=B);
+    printf("Vai levar %d anos para que a população do pais A ultrapasse a de B", anos);
+    printf("população do pais A: %d", A);
+    printf("população do pais B: %d", B);
+	return 0;
+}
