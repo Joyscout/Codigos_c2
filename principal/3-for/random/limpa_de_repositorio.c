@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+int n1;
 void limparTela() {
     #ifdef _WIN32
         system("cls");
@@ -10,8 +10,9 @@ void limparTela() {
 }
 
 int main() {
-    printf("Limpar a tela...\n");
+    printf("Digite algum numero: ");
+    scanf("%d", &n1);
     limparTela();
-    printf("Tela limpa!\n");
+    printf("O numero digitado foi %d", n1);
     return 0;
 }
