@@ -15,6 +15,5 @@ int main()
         printf("%d\t",vetor[i]);
     }
 
-
     return 0;
 }
