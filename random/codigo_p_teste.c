@@ -203,8 +203,7 @@ void simular_atividade(Computador lab[], int n, int id) {
 
     printf("\n  --- ESTADO DEPOIS ---\n");
     printf("  Maquina:     %02d\n", lab[alvo].id);
-    printf("  Estado:      %s\n", lab[alvo].estado == 1 ? "Ligada" :
-                                   lab[alvo].estado == 2 ? "Hibernando" : "Desligada");
+    printf("  Estado:      %s\n", lab[alvo].estado == 1 ? "Ligada" : lab[alvo].estado == 2 ? "Hibernando" : "Desligada");
     printf("  Inatividade: %d min\n", lab[alvo].tempo_inativo);
     printf("  Consumo:     %.1f W\n", lab[alvo].consumo_watts);
 
