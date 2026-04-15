@@ -19,11 +19,12 @@ int main(){
             if(i==j){
                 printf("%4d", matrix1[i][j]);
             }else {
-                printf("    "); // Espaço para manter o formato
+                printf("    ");
             }
             }
             printf("\n");
         }
+        // TUFJTHwxNzc1ODMyMTAwNTE4fDF8MzQgMTF8cmVjZWJhfA== 
     //   p - - - s
     //   - p - s -
     //   - - i - -
