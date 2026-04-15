@@ -3,6 +3,10 @@
 #include <string.h>
 #include <time.h>
 
+/* ==========================================================================
+   ETAPA 1: Bibliotecas, Variaveis, vetores, funções e main
+========================================================================== */
+
 #define TOTAL_COMPUTADORES  15
 #define LIMITE_INATIVIDADE  20
 #define CONSUMO_LIGADO     150
@@ -19,26 +23,27 @@ typedef struct {
     char  historico[300];
 } Computador;
 
-// Protótipos
+// Protótipos das funções
 void  inicializar_lab    (Computador lab[], int n);
 void  monitorar          (Computador lab[], int n);
+void  registrar_evento   (Computador *pc, const char *evento);
 void  exibir_status      (Computador lab[], int n);
 float calcular_consumo   (Computador lab[], int n);
 float calcular_economia  (Computador lab[], int n);
-void  simular_atividade  (Computador lab[], int n, int id);
-void  definir_prioritaria(Computador lab[], int id);
-void  ligar_maquina      (Computador lab[], int id);
 void  gerar_relatorio    (Computador lab[], int n);
+void  ligar_maquina      (Computador lab[], int id);
+void  definir_prioritaria(Computador lab[], int id);
+void  simular_atividade  (Computador lab[], int n, int id);
 void  menu               (Computador lab[], int n, int ciclo_atual);
-void  registrar_evento   (Computador *pc, const char *evento);
-void  limpar_tela        ();
 int   validar_id         (int id, int min, int max);
+void  limpar_tela        ();
 void  aguardar_enter     ();
 void  limpar_buffer      ();
 
 int main() {
     Computador lab[TOTAL_COMPUTADORES];
     srand((unsigned int)time(NULL));
+    
     inicializar_lab(lab, TOTAL_COMPUTADORES);
     definir_prioritaria(lab, 1);
 
@@ -53,6 +58,7 @@ int main() {
     printf("  Limite de inatividade: %d min\n", LIMITE_INATIVIDADE);
     printf("==============================================\n\n");
     printf("  Estado inicial do laboratorio:\n\n");
+    
     exibir_status(lab, TOTAL_COMPUTADORES);
     printf("\nPressione ENTER para iniciar a simulacao...");
     limpar_buffer();
@@ -77,35 +83,9 @@ int main() {
     return 0;
 }
 
-// --- FUNÇÕES DE APOIO ---
-
-void limpar_tela() {
-#ifdef _WIN32
-    system("cls");
-#else
-    system("clear");
-#endif
-}
-
-void limpar_buffer() {
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);
-}
-
-void aguardar_enter() {
-    printf("\nPressione ENTER para voltar ao menu...");
-    limpar_buffer();
-}
-
-int validar_id(int id, int min, int max) {
-    if (id < min || id > max) {
-        printf("\n  [ERRO] ID %d invalido! Digite um numero entre %d e %d.\n", id, min, max);
-        return 0;
-    }
-    return 1;
-}
-
-// --- LÓGICA DO LABORATORIO ---
+/* ==========================================================================
+   ETAPA 2: Criar Funções "iniciar_lab", "monitorar_maquinas" e "registro_de_eventos"
+========================================================================== */
 
 void inicializar_lab(Computador lab[], int n) {
     for (int i = 0; i < n; i++) {
@@ -132,6 +112,17 @@ void monitorar(Computador lab[], int n) {
     }
 }
 
+void registrar_evento(Computador *pc, const char *evento) {
+    if (strlen(pc->historico) + strlen(evento) + 4 < 300) {
+        if (pc->historico[0] != '\0') strcat(pc->historico, " | ");
+        strcat(pc->historico, evento);
+    }
+}
+
+/* ==========================================================================
+   ETAPA 3: Criar as funções: "exibir_status", "calcular_consumo", "calcular_economia" e "gerar_relatorio"
+========================================================================== */
+
 void exibir_status(Computador lab[], int n) {
     printf("--- PAINEL DO LABORATORIO ---\n");
     printf("L=Ligada  H=Hibernando  D=Desligada  *=Prioritaria\n\n");
@@ -141,10 +132,8 @@ void exibir_status(Computador lab[], int n) {
         else if (lab[i].estado == 2) simbolo = 'H';
         else                         simbolo = 'D';
 
-        if (lab[i].prioritaria)
-            printf("[%02d:%c*] ", lab[i].id, simbolo);
-        else
-            printf("[%02d:%c ] ", lab[i].id, simbolo);
+        if (lab[i].prioritaria) printf("[%02d:%c*] ", lab[i].id, simbolo);
+        else                    printf("[%02d:%c ] ", lab[i].id, simbolo);
 
         if ((i + 1) % 5 == 0) printf("\n");
     }
@@ -155,14 +144,78 @@ void exibir_status(Computador lab[], int n) {
 
 float calcular_consumo(Computador lab[], int n) {
     float total = 0.0;
-    for (int i = 0; i < n; i++)
-        total += lab[i].consumo_watts;
+    for (int i = 0; i < n; i++) total += lab[i].consumo_watts;
     return total;
 }
 
 float calcular_economia(Computador lab[], int n) {
     float consumo_maximo = (float)(n * CONSUMO_LIGADO);
     return consumo_maximo - calcular_consumo(lab, n);
+}
+
+void gerar_relatorio(Computador lab[], int n) {
+    int ligadas = 0, hibernando = 0, desligadas = 0;
+    limpar_tela();
+    printf("==========================================\n");
+    printf("          RELATORIO FINAL\n");
+    printf("==========================================\n");
+
+    for (int i = 0; i < n; i++) {
+        if      (lab[i].estado == 1) ligadas++;
+        else if (lab[i].estado == 2) hibernando++;
+        else                         desligadas++;
+    }
+
+    printf("Maquinas ligadas:     %d\n", ligadas);
+    printf("Maquinas hibernando:  %d\n", hibernando);
+    printf("Maquinas desligadas:  %d\n", desligadas);
+    printf("------------------------------------------\n");
+    printf("Consumo total atual:  %.1f W\n", calcular_consumo(lab, n));
+    printf("Economia gerada:      %.1f W\n", calcular_economia(lab, n));
+    printf("------------------------------------------\n");
+    printf("HISTORICO DE EVENTOS POR MAQUINA:\n\n");
+
+    for (int i = 0; i < n; i++) {
+        printf("  PC %02d%s: %s\n", lab[i].id,
+               lab[i].prioritaria ? " [PRIO]" : "       ",
+               lab[i].historico[0] ? lab[i].historico : "(sem eventos)");
+    }
+    printf("==========================================\n");
+    printf("\nFim da simulação.\n");
+}
+
+/* ==========================================================================
+   ETAPA 4: Criar as funções: "ligar_maquina", "definir_prioritario" e "simulacao"
+========================================================================== */
+
+void ligar_maquina(Computador lab[], int id) {
+    for (int i = 0; i < TOTAL_COMPUTADORES; i++) {
+        if (lab[i].id == id) {
+            if (lab[i].estado == 1) {
+                printf("\n  Maquina ja esta ligada.\n");
+            } else {
+                lab[i].estado        = 1;
+                lab[i].tempo_inativo = 0;
+                lab[i].consumo_watts = CONSUMO_LIGADO;
+                registrar_evento(&lab[i], "Ligada manualmente");
+                printf("\n  [OK] Maquina %02d foi ligada com sucesso.\n", id);
+            }
+            aguardar_enter();
+            return;
+        }
+    }
+}
+
+void definir_prioritaria(Computador lab[], int id) {
+    for (int i = 0; i < TOTAL_COMPUTADORES; i++) {
+        if (lab[i].id == id) {
+            lab[i].prioritaria = 1;
+            registrar_evento(&lab[i], "Definida como prioritaria");
+            printf("\n  [OK] Maquina %02d marcada como prioritaria.\n", id);
+            aguardar_enter();
+            return;
+        }
+    }
 }
 
 void simular_atividade(Computador lab[], int n, int id) {
@@ -200,68 +253,17 @@ void simular_atividade(Computador lab[], int n, int id) {
     aguardar_enter();
 }
 
-void definir_prioritaria(Computador lab[], int id) {
-    for (int i = 0; i < TOTAL_COMPUTADORES; i++) {
-        if (lab[i].id == id) {
-            lab[i].prioritaria = 1;
-            registrar_evento(&lab[i], "Definida como prioritaria");
-            printf("\n  [OK] Maquina %02d marcada como prioritaria.\n", id);
-            aguardar_enter();
-            return;
-        }
+/* ==========================================================================
+   ETAPA 5: Interface, menu, e Validação do id
+========================================================================== */
+
+// Valida se o ID digitado pelo usuário existe (entre 1 e 15) para evitar que o programa trave
+int validar_id(int id, int min, int max) {
+    if (id < min || id > max) {
+        printf("\n  [ERRO] ID %d invalido! Digite um numero entre %d e %d.\n", id, min, max);
+        return 0;
     }
-}
-
-void ligar_maquina(Computador lab[], int id) {
-    for (int i = 0; i < TOTAL_COMPUTADORES; i++) {
-        if (lab[i].id == id) {
-            lab[i].estado        = 1;
-            lab[i].tempo_inativo = 0;
-            lab[i].consumo_watts = CONSUMO_LIGADO;
-            registrar_evento(&lab[i], "Ligada manualmente");
-            printf("\n  [OK] Maquina %02d foi ligada com sucesso.\n", id);
-            aguardar_enter();
-            return;
-        }
-    }
-}
-
-void registrar_evento(Computador *pc, const char *evento) {
-    if (strlen(pc->historico) + strlen(evento) + 4 < 300) {
-        if (pc->historico[0] != '\0') strcat(pc->historico, " | ");
-        strcat(pc->historico, evento);
-    }
-}
-
-void gerar_relatorio(Computador lab[], int n) {
-    int ligadas = 0, hibernando = 0, desligadas = 0;
-    limpar_tela();
-    printf("==========================================\n");
-    printf("          RELATORIO FINAL\n");
-    printf("==========================================\n");
-
-    for (int i = 0; i < n; i++) {
-        if      (lab[i].estado == 1) ligadas++;
-        else if (lab[i].estado == 2) hibernando++;
-        else                         desligadas++;
-    }
-
-    printf("Maquinas ligadas:     %d\n", ligadas);
-    printf("Maquinas hibernando:  %d\n", hibernando);
-    printf("Maquinas desligadas:  %d\n", desligadas);
-    printf("------------------------------------------\n");
-    printf("Consumo total atual:  %.1f W\n", calcular_consumo(lab, n));
-    printf("Economia gerada:      %.1f W\n", calcular_economia(lab, n));
-    printf("------------------------------------------\n");
-    printf("HISTORICO DE EVENTOS POR MAQUINA:\n\n");
-
-    for (int i = 0; i < n; i++) {
-        printf("  PC %02d%s: %s\n", lab[i].id,
-               lab[i].prioritaria ? " [PRIO]" : "       ",
-               lab[i].historico[0] ? lab[i].historico : "(sem eventos)");
-    }
-    printf("==========================================\n");
-    printf("\nFim da simulação.\n");
+    return 1;
 }
 
 void menu(Computador lab[], int n, int ciclo_atual) {
@@ -273,7 +275,7 @@ void menu(Computador lab[], int n, int ciclo_atual) {
     printf("  CICLO ATUAL: %d\n", ciclo_atual);
     printf("==============================================\n\n");
     printf("  1. Ver painel de controle\n");
-    printf("  2. Simular atividade/Desligar maquina\n");
+    printf("  2. Simular atividade de usuario/Desligar\n");
     printf("  3. Ligar uma maquina\n");
     printf("  4. Definir maquina como prioritaria\n");
     printf("  5. Ver historico de uma maquina\n");
@@ -289,7 +291,7 @@ void menu(Computador lab[], int n, int ciclo_atual) {
         case 2: {
             int escolha, id_alvo;
             limpar_tela();
-            printf("  Simular acao em qual maquina?\n\n");
+            printf("  Simular atividade em qual maquina?\n\n");
             printf("  1. Maquina aleatoria\n");
             printf("  2. Escolher uma especifica\n\n");
             printf("  Opcao: ");
@@ -304,7 +306,7 @@ void menu(Computador lab[], int n, int ciclo_atual) {
         }
         case 3:
             limpar_tela();
-            printf("  ID da maquina para ligar (1-%d): ", TOTAL_COMPUTADORES);
+            printf("  ID da maquina (1-%d): ", TOTAL_COMPUTADORES);
             scanf("%d", &id); limpar_buffer();
             if (validar_id(id, 1, TOTAL_COMPUTADORES)) ligar_maquina(lab, id);
             else aguardar_enter();
@@ -333,4 +335,29 @@ void menu(Computador lab[], int n, int ciclo_atual) {
         case 0: gerar_relatorio(lab, n); exit(0);
         default: printf("\n  [ERRO] Opcao invalida.\n"); aguardar_enter(); break;
     }
+}
+
+/* ==========================================================================
+   FUNÇÕES ADICIONAIS (Suporte e Sistema)
+========================================================================== */
+
+// Limpa o console para a interface ficar organizada (funciona no Windows e Linux)
+void limpar_tela() {
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+}
+
+// Remove restos do teclado (como o 'Enter' invisível) para o programa não pular perguntas
+void limpar_buffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+// Pausa a tela para dar tempo de o usuário ler o que aconteceu antes de voltar ao menu
+void aguardar_enter() {
+    printf("\nPressione ENTER para voltar ao menu...");
+    limpar_buffer();
 }
