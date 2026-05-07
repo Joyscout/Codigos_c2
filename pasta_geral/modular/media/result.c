@@ -1,17 +1,16 @@
 #include "media.h"
+#include <stdio.h>
+float calculo(float n1, float n2, float n3){
+    return (n1+n2+n3)/3;
+}
 
-float calculo(float n1, float n2, float n3, float media){
-    media=(n1+n2+n3)/3;
-
+void result(float media){
     if(media>=7){
-        void result(){
-            printf("\nAprovado");
-        }
+        printf("\nAprovado - media: %.2f", media);
     }else{
-        void result(){
-               printf("\nReprovcado");
-        }
+        printf("\nReprovado - media: %.2f", media);
+        
     }
-    return ;
+
 }
 

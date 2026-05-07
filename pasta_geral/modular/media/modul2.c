@@ -13,8 +13,9 @@ int main(){
     printf("Digite a terceira nota: ");
     scanf("%f", &n3);
 
+    float med=calculo(n1, n2, n3);
 
-    result();
+    result(med);
     return 0;
 
 }
