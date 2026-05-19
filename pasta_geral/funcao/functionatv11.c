@@ -16,7 +16,6 @@ int main(){
     int matB[3][3] = {{3,3,3}, {6,6,6}, {9,9,9}};
     int matC[3][3];
         
-       
        sub(matA, matB, matC);
         for(i=0; i<3; i++){
             for(j=0; j<3; j++){
@@ -25,5 +24,4 @@ int main(){
             printf("\n");
         }
         return 0;
-
 }
